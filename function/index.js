@@ -1,4 +1,4 @@
-const { chromium } = require("playwright");
+const { chromium } = require("playwright-chromium");
 
 exports.handler = async (event, context) => {
   const browserName = "chromium";
@@ -8,7 +8,8 @@ exports.handler = async (event, context) => {
     console.log(`Starting browser: ${browserName}`);
     browser = await chromium.launch({
       executablePath: chromium.executablePath(),
-      args: ["--single-process", "--no-zygote"]
+      args: ["--single-process", "--no-zygote"],
+      headless: true
     });
     const context = await browser.newContext();
     const page = await context.newPage();

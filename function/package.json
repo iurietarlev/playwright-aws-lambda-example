@@ -6,6 +6,6 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "playwright": "1.38.0"
+    "playwright-chromium": "1.38.0"
   }
 }
