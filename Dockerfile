@@ -1,7 +1,7 @@
 # Define custom function directory
 ARG FUNCTION_DIR="/function"
 
-FROM mcr.microsoft.com/playwright:focal as build-image
+FROM mcr.microsoft.com/playwright:v1.38.0-focal as build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -33,7 +33,7 @@ RUN npm install aws-lambda-ric
 COPY function/ ${FUNCTION_DIR}
 
 # Multi-stage build: Get a fresh slim copy of base image to reduce final size
-FROM mcr.microsoft.com/playwright:focal
+FROM mcr.microsoft.com/playwright:v1.38.0-focal
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -45,7 +45,7 @@ WORKDIR ${FUNCTION_DIR}
 COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
 
 # Remove Firefox
-RUN rm -R /home/pwuser/.cache/ms-playwright/firefox-*
+RUN rm -R /ms-playwright/firefox-*
 
 # Add Lambda Runtime Interface Emulator and use a script in the ENTRYPOINT for simpler local runs
 ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /usr/local/bin/aws-lambda-rie
