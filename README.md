@@ -1,12 +1,8 @@
 # Playwright on AWS Lambda
 
-This is an example project for running Playwright on AWS Lambda using the newly released features of running custom container images as Lambda functions.
+This is an example project for running Playwright Chromium browser on AWS Lambda by running a custom container image as the Lambda function.
 
-I also wrote [a post about Playwright on AWS Lambda](https://www.larihaataja.com/running-e2e-tests-playwright-aws-lambda) to my Hashbode blog.
-
-**NOTE! Currently only Chromium and WebKit browser are working. Firefox requires some more tuning...**
-
-# How to use this
+Insipred from [a post about Playwright on AWS Lambda](https://www.larihaataja.com/running-e2e-tests-playwright-aws-lambda).
 
 ## Requirements
 
@@ -16,16 +12,19 @@ I also wrote [a post about Playwright on AWS Lambda](https://www.larihaataja.com
 ## Locally with Docker
 
 Build docker container image
+
 ```
 docker build -t playwright-aws-lambda-example:latest .
 ```
 
 Run container
+
 ```
 docker run -p 9000:8080 playwright-aws-lambda-example:latest
 ```
 
 Invoke function
+
 ```
 curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
 ```
@@ -35,21 +34,25 @@ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d
 In the following examples, replace `YOUR_AWS_ACCOUNT_ID` with your AWS Account Id.
 
 Create repository on AWS ECR (Elastic Container Registry)
+
 ```
 aws ecr create-repository --repository-name playwright-aws-lambda-example --image-scanning-configuration scanOnPush=true
 ```
 
 Tag docker image for ECR repository
+
 ```
 docker tag playwright-aws-lambda-example:latest YOUR_AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/playwright-aws-lambda-example:latest
 ```
 
 Login
+
 ```
 aws ecr get-login-password | docker login --username AWS --password-stdin YOUR_AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com
 ```
 
 Push image to ECR
+
 ```
 docker push YOUR_AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/playwright-aws-lambda-example
 ```
