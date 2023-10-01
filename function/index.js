@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
   };
   const browserLaunchArgs = {
     webkit: [],
-    chromium: ["--single-process"]
+    chromium: ["--single-process", "--no-zygote"]
     //'firefox': [],
   };
   let browser = null;
