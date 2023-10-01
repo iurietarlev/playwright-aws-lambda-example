@@ -1,39 +1,14 @@
-const { webkit, chromium } = require("playwright");
-
-getCustomExecutablePath = (expectedPath) => {
-  return expectedPath;
-  //   const suffix = expectedPath.split("/.cache/ms-playwright/")[1];
-  //   return `/home/pwuser/.cache/ms-playwright/${suffix}`;
-};
+const { chromium } = require("playwright");
 
 exports.handler = async (event, context) => {
-  let browserName = event.browser || "chromium";
-  const extraLaunchArgs = event.browserArgs || [];
-  const browserTypes = {
-    webkit: webkit,
-    chromium: chromium
-    //'firefox': firefox,
-  };
-  const browserLaunchArgs = {
-    webkit: [],
-    chromium: ["--single-process", "--no-zygote"]
-    //'firefox': [],
-  };
+  const browserName = "chromium";
   let browser = null;
-  if (Object.keys(browserTypes).indexOf(browserName) < 0) {
-    console.log(`Browser '${browserName}' not supported, using chromium`);
-    browserName = "chromium";
-  }
+
   try {
     console.log(`Starting browser: ${browserName}`);
-    console.log(
-      `executable path: ${browserTypes[browserName].executablePath()}`
-    );
-    browser = await browserTypes[browserName].launch({
-      executablePath: getCustomExecutablePath(
-        browserTypes[browserName].executablePath()
-      ),
-      args: browserLaunchArgs[browserName].concat(extraLaunchArgs)
+    browser = await chromium.launch({
+      executablePath: chromium.executablePath(),
+      args: ["--single-process", "--no-zygote"]
     });
     const context = await browser.newContext();
     const page = await context.newPage();
